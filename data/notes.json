@@ -8,5 +8,16 @@
       "Aynı anda yalnızca ilk iki hisse (AAPL, NVDA) açık pozisyon olabilir.",
       "Alarmlar aktif: Teknik Zamanlama Sal–Cmt 00:00–06:30 (Brisbane) arası her 30 dakikada kontrol; Makro Stratejist 09:00 / 18:00 / 22:00 kontrolleri."
     ]
+  },
+  {
+    "date": "2026-10-17",
+    "title": "12:00 hafta sonu özeti",
+    "items": [
+      "Cuma 16 Eki: Nasdaq Composite -%2,1 (26.140), Nasdaq-100 -%2,5 (29.188); haftalık -%4,5, Haziran'dan beri en kötü hafta.",
+      "Neden: çip/AI satışı (Micron -%5,6, Intel -%5,8, CoreWeave -%11,9), Brent ~110$, Aralık Fed artış beklentisi.",
+      "Gelecek hafta: Netflix 20 Eki, Tesla ve Meta 21 Eki kapanış sonrası.",
+      "NVDA 214,13$ (şart 214,5$ altında). Plan: 22 Eki sonrası kapanış >214,5$ ise giriş, stop ~195,5$, hedef ~244,4$.",
+      "Portföy tamamen nakit (AU$100). AUD/USD 0,694."
+    ]
   }
 ]
