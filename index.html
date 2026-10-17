@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nasdaq Ekibi – Araştırma Paneli</title>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--tx:#e2e8f0;--mut:#94a3b8;--ac:#38bdf8;--red:#f87171;--grn:#4ade80}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5}
+header{padding:20px 16px;border-bottom:1px solid #334155}header h1{margin:0;font-size:1.5rem}header p{margin:4px 0 0;color:var(--mut)}
+main{max-width:1100px;margin:auto;padding:16px}section{background:var(--card);border-radius:12px;padding:16px;margin-bottom:16px}
+h2{margin-top:0;font-size:1.15rem;color:var(--ac)}.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.tbl{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.92rem}th,td{text-align:left;padding:8px;border-bottom:1px solid #334155;vertical-align:top}
+th{color:var(--mut);font-weight:600}.veto{color:var(--red);font-weight:600}.ok{color:var(--grn);font-weight:600}
+ul{padding-left:20px;margin:6px 0}.note{border-left:3px solid var(--ac);padding-left:12px;margin-bottom:14px}.note h3{margin:0;font-size:1rem}
+.roles{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0}.roles li{background:#334155;padding:6px 12px;border-radius:999px}
+footer{text-align:center;color:var(--mut);padding:24px 16px;font-size:.9rem}small{color:var(--mut)}
+</style></head><body>
+<header><h1>Nasdaq Ekibi</h1><p>Yalnızca araştırma paneli · işlem yok, hesap erişimi yok · Saatler: Brisbane (UTC+10)</p></header>
+<main>
+<section><h2>İzleme Listesi</h2><small>Fiyatlar TradingView üzerinden, gecikmeli olabilir.</small>
+<div class="grid" id="watch"></div></section>
+
+<section><h2>Plan Tablosu</h2><div class="tbl"><table>
+<tr><th>Hisse</th><th>Durum</th><th>Giriş</th><th>Stop</th><th>Hedef</th><th>Not</th></tr>
+<tr><td><b>AAPL</b> #1</td><td class="ok">Aday 1</td><td>335–338 USD</td><td>-8% (~310, 337 girişte)</td><td>+15% (~387,6)</td><td>Bilanço öncesi 2 Kas ABD kapanışında çıkış (bilanço 3 Kas ~07:30 Brisbane)</td></tr>
+<tr><td><b>NVDA</b> #2</td><td class="ok">Aday 2</td><td>22 Eki sonrası yalnızca günlük kapanış &gt; 214,5</td><td>Dolumdan -8%</td><td>Dolumdan +15%</td><td>Bilanço 18 Kas</td></tr>
+<tr><td><b>GOOGL</b></td><td>Bekle</td><td>–</td><td>–</td><td>–</td><td>29 Eki (Brisbane) bilanço sonrası gözden geçir</td></tr>
+<tr><td><b>META</b></td><td>Bekle</td><td>–</td><td>–</td><td>–</td><td>22 Eki bilanço sonrası gözden geçir</td></tr>
+<tr><td><b>ADBE</b></td><td>Bekle</td><td>Dönüş teyidi: kapanış &gt; 257</td><td>–</td><td>–</td><td>Dönüş bekleniyor</td></tr>
+<tr><td><b>TSLA</b></td><td class="veto">VETO</td><td>–</td><td>–</td><td>–</td><td>22 Eki bilançosuna kadar</td></tr>
+<tr><td><b>AMZN</b></td><td class="veto">VETO</td><td>–</td><td>–</td><td>–</td><td>30 Eki bilançosuna kadar</td></tr>
+</table></div></section>
+
+<section><h2>Kurallar</h2><ul>
+<li>Test bütçesi: <b>AU$100</b></li><li>En fazla <b>2 pozisyon × AU$50</b></li>
+<li>Zarar durdur: <b>-8%</b></li><li>Kâr al: <b>+15%</b></li></ul>
+<p><b>Mevcut pozisyonlar:</b> Yok</p></section>
+
+<section><h2>Takvim (Brisbane saati)</h2><div class="tbl"><table>
+<tr><th>Tarih</th><th>Saat</th><th>Olay</th></tr>
+<tr><td>22 Eki</td><td>~06:00</td><td>META bilançosu</td></tr>
+<tr><td>22 Eki</td><td>~06:10</td><td>TSLA bilançosu</td></tr>
+<tr><td>29 Eki</td><td>04:00</td><td>Fed faiz kararı</td></tr>
+<tr><td>29 Eki</td><td>–</td><td>GOOGL bilançosu</td></tr>
+<tr><td>30 Eki</td><td>07:00</td><td>AMZN bilanço toplantısı</td></tr>
+<tr><td>3 Kas</td><td>~07:30</td><td>AAPL bilançosu</td></tr>
+<tr><td>18 Kas</td><td>–</td><td>NVDA bilançosu</td></tr>
+</table></div></section>
+
+<section><h2>Ekip Rolleri</h2><ul class="roles">
+<li>Manager</li><li>Makro Stratejist</li><li>Hisse Analisti</li><li>Teknik Zamanlama</li><li>Katalizör Avcısı</li><li>Risk Sorumlusu</li></ul></section>
+
+<section><h2>Ekip Notları</h2><div id="notes"><small>Yükleniyor…</small></div></section>
+</main>
+<footer><b>Yatırım tavsiyesi değildir.</b><br>Nasdaq Ekibi · yalnızca araştırma amaçlıdır</footer>
+<script>
+["AAPL","NVDA","GOOGL","META","ADBE"].forEach(s=>{
+ const d=document.createElement("div");d.className="tradingview-widget-container";
+ const sc=document.createElement("script");sc.src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js";sc.async=true;
+ sc.text=JSON.stringify({symbol:"NASDAQ:"+s,width:"100%",height:220,locale:"tr",dateRange:"3M",colorTheme:"dark",isTransparent:true,autosize:false});
+ d.appendChild(sc);document.getElementById("watch").appendChild(d);});
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+fetch("data/notes.json",{cache:"no-store"}).then(r=>r.json()).then(n=>{
+ n.sort((a,b)=>b.date.localeCompare(a.date));
+ document.getElementById("notes").innerHTML=n.map(x=>`<div class="note"><h3>${esc(x.date)} – ${esc(x.title||"")}</h3><ul>${(x.items||[]).map(i=>`<li>${esc(i)}</li>`).join("")}</ul></div>`).join("");
+}).catch(()=>{document.getElementById("notes").innerHTML="<small>Notlar yüklenemedi (sayfayı bir web sunucusu üzerinden açın).</small>"});
+</script></body></html>
