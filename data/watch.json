@@ -1,7 +1,38 @@
 [
-  { "ticker": "AAPL", "condition": "Giriş bölgesi 335–338 USD", "trigger": 335, "triggerHigh": 338, "lastClose": null, "lastCloseDate": null },
-  { "ticker": "NVDA", "condition": "22 Eki sonrası günlük kapanış > 214,50", "trigger": 214.5, "lastClose": 214.13, "lastCloseDate": "2026-10-16" },
-  { "ticker": "GOOGL", "condition": "29 Eki bilanço sonrası gözden geçir", "trigger": null, "lastClose": null, "lastCloseDate": null },
-  { "ticker": "META", "condition": "22 Eki bilanço sonrası gözden geçir", "trigger": null, "lastClose": null, "lastCloseDate": null },
-  { "ticker": "ADBE", "condition": "Dönüş teyidi: kapanış > 257", "trigger": 257, "lastClose": null, "lastCloseDate": null }
+  {
+    "ticker": "AAPL",
+    "condition": "Giriş bölgesi 335–338 USD",
+    "trigger": 335,
+    "triggerHigh": 338,
+    "lastClose": 343.46,
+    "lastCloseDate": "2026-10-16"
+  },
+  {
+    "ticker": "NVDA",
+    "condition": "22 Eki sonrası günlük kapanış > 214,50",
+    "trigger": 214.5,
+    "lastClose": 214.13,
+    "lastCloseDate": "2026-10-16"
+  },
+  {
+    "ticker": "GOOGL",
+    "condition": "29 Eki bilanço sonrası gözden geçir",
+    "trigger": null,
+    "lastClose": 340.59,
+    "lastCloseDate": "2026-10-16"
+  },
+  {
+    "ticker": "META",
+    "condition": "22 Eki bilanço sonrası gözden geçir",
+    "trigger": null,
+    "lastClose": 709.33,
+    "lastCloseDate": "2026-10-16"
+  },
+  {
+    "ticker": "ADBE",
+    "condition": "Dönüş teyidi: kapanış > 257",
+    "trigger": 257,
+    "lastClose": 245.2,
+    "lastCloseDate": "2026-10-16"
+  }
 ]

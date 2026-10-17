@@ -1,1 +1,1 @@
-{ "updated": null, "note": "Manager günceller. Fiyat bilinmiyorsa null bırakın.", "prices": { "AAPL": null, "NVDA": 214.13, "GOOGL": null, "META": null, "ADBE": null } }
+{"updated": "2026-10-17 14:47 Brisbane", "note": "Manager günceller. Fiyat bilinmiyorsa null bırakın.", "prices": {"AAPL": 343.46, "NVDA": 214.13, "GOOGL": 340.59, "META": 709.33, "ADBE": 245.2}}
