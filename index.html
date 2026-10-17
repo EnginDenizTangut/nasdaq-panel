@@ -12,6 +12,7 @@ th{color:var(--mut);font-weight:600}.veto{color:var(--red);font-weight:600}.ok{c
 ul{padding-left:20px;margin:6px 0}.note{border-left:3px solid var(--ac);padding-left:12px;margin-bottom:14px}.note h3{margin:0;font-size:1rem}
 .roles{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0}.roles li{background:#334155;padding:6px 12px;border-radius:999px}
 footer{text-align:center;color:var(--mut);padding:24px 16px;font-size:.9rem}small{color:var(--mut)}
+.calc{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}.calc label{display:flex;flex-direction:column;font-size:.9rem;color:var(--mut)}.calc input{margin-top:4px;padding:8px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:var(--tx);font-size:1rem}
 </style></head><body>
 <header><h1>Nasdaq Ekibi</h1><p>Yalnızca araştırma paneli · işlem yok, hesap erişimi yok · Saatler: Brisbane (UTC+10)</p></header>
 <main>
@@ -48,6 +49,20 @@ footer{text-align:center;color:var(--mut);padding:24px 16px;font-size:.9rem}smal
 <section><h2>Ekip Rolleri</h2><ul class="roles">
 <li>Manager</li><li>Makro Stratejist</li><li>Hisse Analisti</li><li>Teknik Zamanlama</li><li>Katalizör Avcısı</li><li>Risk Sorumlusu</li></ul></section>
 
+<section><h2>Yaklaşan Olaylar – Geri Sayım</h2><div class="tbl"><table id="cd"></table></div></section>
+
+<section><h2>Alarm Durumu</h2><div class="tbl"><table id="watchtbl"><tr><td><small>Yükleniyor…</small></td></tr></table></div><small>Son kapanışlar data/watch.json içinden; doğrulanmamış değerler "–" gösterilir.</small></section>
+
+<section><h2>Pozisyon Takibi</h2><div id="pos"><small>Yükleniyor…</small></div><small id="pxinfo"></small></section>
+
+<section><h2>İşlem Günlüğü</h2><div id="trades"><small>Yükleniyor…</small></div></section>
+
+<section><h2>Maliyet Hesaplayıcı</h2>
+<div class="calc"><label>Pozisyon (AUD)<input id="fPos" type="number" value="50" step="1"></label>
+<label>İşlem başı komisyon (AUD)<input id="fCom" type="number" placeholder="ör. 3" step="0.01"></label>
+<label>Döviz (FX) ücreti %<input id="fFx" type="number" placeholder="ör. 0.6" step="0.01"></label></div>
+<div id="fOut"><small>Komisyon ve FX ücretini girin (aracı kurum bilinmiyor).</small></div></section>
+
 <section><h2>Ekip Notları</h2><div id="notes"><small>Yükleniyor…</small></div></section>
 </main>
 <footer><b>Yatırım tavsiyesi değildir.</b><br>Nasdaq Ekibi · yalnızca araştırma amaçlıdır</footer>
@@ -62,4 +77,37 @@ fetch("data/notes.json",{cache:"no-store"}).then(r=>r.json()).then(n=>{
  n.sort((a,b)=>b.date.localeCompare(a.date));
  document.getElementById("notes").innerHTML=n.map(x=>`<div class="note"><h3>${esc(x.date)} – ${esc(x.title||"")}</h3><ul>${(x.items||[]).map(i=>`<li>${esc(i)}</li>`).join("")}</ul></div>`).join("");
 }).catch(()=>{document.getElementById("notes").innerHTML="<small>Notlar yüklenemedi (sayfayı bir web sunucusu üzerinden açın).</small>"});
-</script></body></html>
+</script><script>
+const $=id=>document.getElementById(id),f2=v=>v==null||isNaN(v)?"–":Number(v).toFixed(2),pct=v=>v==null||isNaN(v)?"–":(v>=0?"+":"")+v.toFixed(2)+"%";
+const J=p=>fetch(p,{cache:"no-store"}).then(r=>r.json());
+const cls=v=>v==null?"":(v>=0?"ok":"veto");
+// Countdown
+const EV=[["META bilançosu","2026-10-22T06:00:00+10:00",1],["TSLA bilançosu","2026-10-22T06:10:00+10:00",1],["Fed faiz kararı","2026-10-29T04:00:00+10:00",0],["GOOGL bilançosu","2026-10-29T00:00:00+10:00",2],["AMZN bilanço toplantısı","2026-10-30T07:00:00+10:00",0],["AAPL bilançosu","2026-11-03T07:30:00+10:00",1],["NVDA bilançosu","2026-11-18T00:00:00+10:00",2]];
+function cd(){const n=Date.now();const r=EV.filter(e=>new Date(e[1])>n).map(e=>{const ms=new Date(e[1])-n,d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4);
+const dt=new Date(e[1]).toLocaleString("tr-TR",{timeZone:"Australia/Brisbane",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+return `<tr><td>${e[0]}</td><td>${e[2]==2?dt.split(" ").slice(0,2).join(" ")+" (saat belirsiz)":(e[2]?"~":"")+dt}</td><td><b>${d} g ${h} sa ${e[2]==2?"":m+" dk"}</b></td></tr>`});
+$("cd").innerHTML="<tr><th>Olay</th><th>Brisbane</th><th>Kalan</th></tr>"+(r.join("")||"<tr><td colspan=3>Yaklaşan olay yok</td></tr>");}
+cd();setInterval(cd,60000);
+// Watch
+J("data/watch.json").then(w=>{$("watchtbl").innerHTML="<tr><th>Hisse</th><th>Koşul</th><th>Tetik</th><th>Son kapanış</th><th>Tetiğe uzaklık</th></tr>"+w.map(x=>{let dist="–";
+if(x.trigger!=null&&x.lastClose!=null){if(x.triggerHigh!=null&&x.lastClose>=x.trigger&&x.lastClose<=x.triggerHigh)dist='<span class="ok">Bölgede</span>';
+else{const t=x.triggerHigh!=null&&x.lastClose>x.triggerHigh?x.triggerHigh:x.trigger,d=t-x.lastClose;dist=`<span class="${x.triggerHigh==null&&d<=0?"ok":""}">${d>=0?"+":""}${d.toFixed(2)} USD (${pct(d/x.lastClose*100)})</span>`;}}
+return `<tr><td><b>${esc(x.ticker)}</b></td><td>${esc(x.condition)}</td><td>${x.trigger==null?"–":f2(x.trigger)+(x.triggerHigh?"–"+f2(x.triggerHigh):"")}</td><td>${f2(x.lastClose)}${x.lastCloseDate?" <small>("+esc(x.lastCloseDate)+")</small>":""}</td><td>${dist}</td></tr>`}).join("")});
+// Positions (prices.json; tarayıcıdan anahtarsız canlı kaynak CORS nedeniyle kullanılamıyor)
+Promise.all([J("data/positions.json"),J("data/prices.json")]).then(([p,px])=>{$("pxinfo").textContent="Fiyat kaynağı: data/prices.json"+(px.updated?" (güncelleme: "+px.updated+")":"")+" — Yahoo/Stooq tarayıcıdan CORS nedeniyle erişilemiyor.";
+if(!p.length){$("pos").innerHTML="<p>Açık pozisyon yok.</p>";return}
+$("pos").innerHTML='<div class="tbl"><table><tr><th>Hisse</th><th>Adet</th><th>Alış</th><th>Tarih</th><th>Son fiyat</th><th>K/Z USD</th><th>K/Z AUD</th><th>Stop (-8%)</th><th>Hedef (+15%)</th></tr>'+p.map(x=>{
+const last=(px.prices||{})[x.ticker],stop=x.buyPrice*.92,tgt=x.buyPrice*1.15,pl=last!=null?(last-x.buyPrice)*x.qty:null,plA=pl!=null&&x.audUsd?pl/x.audUsd:null;
+return `<tr><td><b>${esc(x.ticker)}</b></td><td>${x.qty}</td><td>${f2(x.buyPrice)}</td><td>${esc(x.date)}</td><td>${f2(last)}</td><td class="${cls(pl)}">${f2(pl)} (${pct(last!=null?(last/x.buyPrice-1)*100:null)})</td><td class="${cls(plA)}">${f2(plA)}</td><td>${f2(stop)}${last!=null?" <small>("+pct((stop/last-1)*100)+")</small>":""}</td><td>${f2(tgt)}${last!=null?" <small>("+pct((tgt/last-1)*100)+")</small>":""}</td></tr>`}).join("")+"</table></div><small>AUD = USD ÷ audUsd (alış günündeki kur).</small>"});
+// Trades
+J("data/trades.json").then(t=>{if(!t.length){$("trades").innerHTML="<p>Henüz işlem yok. AU$100 test toplam getiri: <b>0,00 AUD (0,00%)</b></p>";return}
+let tot=0;const rows=t.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(x=>{if(x.resultAud!=null)tot+=x.resultAud;
+return `<tr><td>${esc(x.date)}</td><td>${esc(x.ticker)}</td><td>${x.side==="sell"?"SAT":"AL"}</td><td>${x.qty}</td><td>${f2(x.price)}</td><td class="${cls(x.resultAud)}">${x.resultAud==null?"–":f2(x.resultAud)+" AUD"}</td><td>${esc(x.note||"")}</td></tr>`}).join("");
+$("trades").innerHTML=`<div class="tbl"><table><tr><th>Tarih</th><th>Hisse</th><th>Yön</th><th>Adet</th><th>Fiyat USD</th><th>Sonuç</th><th>Not</th></tr>${rows}</table></div><p>AU$100 test toplam getiri: <b class="${cls(tot)}">${f2(tot)} AUD (${pct(tot)})</b></p>`});
+// Fee calc
+function fee(){const P=+$("fPos").value||0,c=$("fCom").value,fx=$("fFx").value;if(c===""&&fx===""){$("fOut").innerHTML="<small>Komisyon ve FX ücretini girin (aracı kurum bilinmiyor).</small>";return}
+const C=+c||0,F=(+fx||0)/100,rt=2*C+P*F+P*F,be=P?rt/P*100:0,net=g=>{const s=P*(1+g);return s-P-(2*C+P*F+s*F)};
+$("fOut").innerHTML=`<p>Gidiş-dönüş maliyet: <b>${f2(2*C+P*F*2)} AUD</b> · Başabaş: <b>${pct(be)}</b></p><p>+15%'te net K/Z: <b class="${cls(net(.15))}">${f2(net(.15))} AUD</b> · -8%'de net K/Z: <b class="veto">${f2(net(-.08))} AUD</b></p><small>Varsayım: alış ve satışta birer komisyon, her iki yönde FX ücreti (satışta çıkış tutarı üzerinden).</small>`}
+["fPos","fCom","fFx"].forEach(i=>$(i).addEventListener("input",fee));fee();
+</script>
+</body></html>
